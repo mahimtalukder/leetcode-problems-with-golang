@@ -94,7 +94,7 @@ This repository is the working space for ongoing LeetCode practice. More solutio
 
 ## Author
 
-Maintained by Mahim.
+Maintained by MD Mahim Talukder.
 
 ---
 

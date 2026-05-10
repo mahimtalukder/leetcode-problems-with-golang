@@ -1,0 +1,82 @@
+package main
+
+import (
+	"fmt"
+	"slices"
+)
+
+type Stack []int
+
+// Push adds an element to the top
+func (s *Stack) Push(v int) {
+	*s = append(*s, v)
+}
+
+// Get top
+func (s *Stack) Top() int {
+	if len(*s) == 0 {
+		return -1
+	}
+
+	return (*s)[len(*s)-1]
+}
+
+func (s *Stack) Len() int {
+	n := len(*s)
+	if n == 0 {
+		return -1
+	}
+
+	return n
+}
+
+//Get Lenth of Stack
+
+// Pop removes and returns the top element
+func (s *Stack) Pop() (int, bool) {
+	if len(*s) == 0 {
+		return -1, false
+	}
+	index := len(*s) - 1
+	element := (*s)[index]
+	*s = (*s)[:index]
+	return element, true
+}
+
+func maximumJumps(nums []int, target int) int {
+	//building graph from nums
+	n := len(nums)
+	path := []int{}
+	var stack Stack
+	stack.Push(0)
+	markVisited := make(map[int]bool)
+
+	for len(stack) != 0 {
+		top := stack.Top()
+		markVisited[top] = true
+		allEdgeVisited := true
+		for i := top + 1; i < n; i++ {
+			isVisited := markVisited[i]
+			if !isVisited && -target <= nums[i]-nums[top] && nums[i]-nums[top] <= target {
+				allEdgeVisited = false
+				if i == n-1 {
+					path = append(path, stack.Len())
+					stack.Pop()
+					break
+				}
+				stack.Push(i)
+				break
+			}
+		}
+		if allEdgeVisited {
+			stack.Pop()
+		}
+	}
+
+	fmt.Println("Paths:\n", path)
+	if len(path) > 0 {
+		return slices.Max(path)
+	}else{
+		return -1
+	}
+}
